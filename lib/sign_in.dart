@@ -13,13 +13,13 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  final prefs = SharedPreferences.getInstance();
+  final pref = SharedPreferences.getInstance();
   bool eye = true;
 
   bool _checkVal = false;
 
   void _submit() async {
-    SharedPreferences _prefs = await prefs;
+    SharedPreferences _prefs = await pref;
     if (_errorText == null && _errorUserText == null) {
       final String? username = _prefs.getString('username');
       final String? password = _prefs.getString('password');
@@ -38,18 +38,14 @@ class _SignInState extends State<SignIn> {
   }
 
   String? get _errorUserText {
-    final usertext = usernameController.value.text;
-
-    if (usertext.isEmpty) {
+    if (usernameController.value.text.isEmpty) {
       return "Can't be empty";
     }
     return null;
   }
 
   String? get _errorText {
-    final psstext = passwordController.value.text;
-
-    if (psstext.isEmpty) {
+    if (passwordController.value.text.isEmpty) {
       return "Can't be empty";
     }
     return null;

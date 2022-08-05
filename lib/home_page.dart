@@ -1,11 +1,7 @@
 import 'dart:convert';
-import 'dart:math';
-
-import 'sign_up.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'sign_in.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -126,12 +122,14 @@ class _MyHomePageState extends State<MyHomePage> {
                               : ElevatedButton.styleFrom(
                                   primary: Colors.transparent,
                                   shadowColor: Colors.transparent),
-                          onPressed: () {
-                            setState(() {
-                              chooseBtn();
-                              getTv();
-                            });
-                          },
+                          onPressed: (choose == false)
+                              ? () {
+                                  setState(() {
+                                    chooseBtn();
+                                    getTv();
+                                  });
+                                }
+                              : null,
                           child: Text(
                             "On TV",
                             style: (choose == false)
@@ -156,14 +154,17 @@ class _MyHomePageState extends State<MyHomePage> {
                                   borderRadius: BorderRadius.circular(18.0),
                                 )))
                               : ElevatedButton.styleFrom(
+                                  onSurface: Colors.blueAccent,
                                   primary: Colors.transparent,
                                   shadowColor: Colors.transparent),
-                          onPressed: () {
-                            setState(() {
-                              chooseBtn();
-                              getTheaters();
-                            });
-                          },
+                          onPressed: (choose == true)
+                              ? () {
+                                  setState(() {
+                                    chooseBtn();
+                                    getTheaters();
+                                  });
+                                }
+                              : null,
                           child: Text(
                             "On Theaters",
                             style: (choose == true)
@@ -185,7 +186,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: (list == [])
                   ? const Center(
                       child: SpinKitFoldingCube(
-                        color: Colors.white,
+                        color: Colors.grey,
                       ),
                     )
                   : Padding(

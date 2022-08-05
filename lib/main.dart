@@ -1,14 +1,6 @@
-// ignore_for_file: sized_box_for_whitespace
-
-import 'dart:convert';
-import 'dart:math';
-
 import 'package:api/home_page.dart';
-
 import 'sign_up.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'sign_in.dart';
 
@@ -24,9 +16,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: '/',
       routes: {
-        '/signIn': (context) => SignIn(),
-        '/signUp': (context) => SignUp(),
-        '/homePage': (context) => MyHomePage(),
+        '/signIn': (context) => const SignIn(),
+        '/signUp': (context) => const SignUp(),
+        '/homePage': (context) => const MyHomePage(),
       },
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
