@@ -1,10 +1,11 @@
 import 'dart:convert';
 
-import 'package:api/home_page.dart';
+import 'package:api/view/home_page.dart';
 import 'package:api/main.dart';
 
 import 'sign_up.dart';
 import 'sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,6 +26,7 @@ class _SignUpState extends State<SignUp> {
 
     RegExp regex =
         RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+
     if (psstext.isEmpty) {
       return "Can't be empty";
     }
@@ -38,12 +40,22 @@ class _SignUpState extends State<SignUp> {
   }
 
   void _submit() async {
-    SharedPreferences _prefs = await prefs;
     if (_errorText == null && _errorUserText == null) {
-      _prefs.setString("password", passwordController.text);
-      _prefs.setString("username", usernameController.text);
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => MyHomePage()));
+      try {
+        final _auth = FirebaseAuth.instance;
+
+        final newUser = await _auth.createUserWithEmailAndPassword(
+            email: usernameController.text, password: passwordController.text);
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => MyHomePage()));
+      } catch (e) {
+        var snackBar = SnackBar(
+          duration: const Duration(milliseconds: 1500),
+          content:
+              Text('${e.toString().replaceRange(0, 14, '').split(']')[1]}'),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
     }
   }
 
@@ -217,10 +229,7 @@ class _SignUpState extends State<SignUp> {
                                   ),
                                   onPressed: () {
                                     setState(() {
-                                      if (passwordController
-                                              .value.text.isNotEmpty &&
-                                          usernameController
-                                              .value.text.isNotEmpty) {
+                                      if (_validate == true) {
                                         _submit();
                                       } else {
                                         _validate = true;
@@ -244,7 +253,10 @@ class _SignUpState extends State<SignUp> {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  Navigator.pushNamed(context, '/signIn');
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => SignIn()));
                                 },
                                 child: const Text(
                                   'Sign In',

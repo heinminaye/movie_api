@@ -1,10 +1,18 @@
-import 'package:api/home_page.dart';
-import 'sign_up.dart';
+import 'package:api/view/home_page.dart';
+import 'package:api/view/sign_up.dart';
+import 'view/sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'sign_in.dart';
+import 'view/sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -14,7 +22,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/',
+      initialRoute:
+          FirebaseAuth.instance.currentUser == null ? '/' : '/homePage',
       routes: {
         '/signIn': (context) => const SignIn(),
         '/signUp': (context) => const SignUp(),
@@ -25,7 +34,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MainPage(),
+      home:
+          FirebaseAuth.instance.currentUser == null ? MainPage() : MyHomePage(),
     );
   }
 }
@@ -38,9 +48,29 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  void checkLogin() {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+        print('user sign out!');
+      } else {
+        Navigator.pushReplacementNamed(context, '/homePage');
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    checkLogin();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: false,
+      ),
       backgroundColor: Colors.black,
       body: Stack(
         children: <Widget>[

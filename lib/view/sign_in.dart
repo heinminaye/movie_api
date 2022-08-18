@@ -1,8 +1,11 @@
 import 'dart:convert';
 
-import 'main.dart';
+import 'package:api/view/sign_up.dart';
+
+import '../main.dart';
 import 'home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SignIn extends StatefulWidget {
@@ -19,21 +22,33 @@ class _SignInState extends State<SignIn> {
   bool _checkVal = false;
 
   void _submit() async {
-    SharedPreferences _prefs = await pref;
     if (_errorText == null && _errorUserText == null) {
-      final String? username = _prefs.getString('username');
-      final String? password = _prefs.getString('password');
-      if (username == usernameController.text &&
-          password == passwordController.text) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => MyHomePage()));
-      } else {
-        const snackBar = SnackBar(
-          duration: Duration(milliseconds: 900),
-          content: Text('Login Failed'),
+      try {
+        final _auth = FirebaseAuth.instance;
+
+        UserCredential currentUser = await _auth.signInWithEmailAndPassword(
+            email: usernameController.text, password: passwordController.text);
+
+        Navigator.pushReplacementNamed(context, '/homePage');
+      } catch (e) {
+        var snackBar = SnackBar(
+          duration: const Duration(milliseconds: 1500),
+          content:
+              Text('${e.toString().replaceRange(0, 14, '').split(']')[1]}'),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
+      // if (username == usernameController.text &&
+      //     password == passwordController.text) {
+      //   Navigator.pushReplacement(
+      //       context, MaterialPageRoute(builder: (context) => MyHomePage()));
+      // } else {
+      //   const snackBar = SnackBar(
+      //     duration: Duration(milliseconds: 1500),
+      //     content: Text('Login Failed'),
+      //   );
+      //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      // }
     }
   }
 
@@ -71,7 +86,7 @@ class _SignInState extends State<SignIn> {
                   IconButton(
                     splashRadius: 20,
                     onPressed: () {
-                      Navigator.pop(context, '/sign_in');
+                      Navigator.pop(context);
                     },
                     icon: const Icon(
                       Icons.arrow_back,
@@ -189,8 +204,7 @@ class _SignInState extends State<SignIn> {
                       onPressed: () {
                         setState(() {
                           setState(() {
-                            if (passwordController.value.text.isNotEmpty &&
-                                usernameController.value.text.isNotEmpty) {
+                            if (_checkVal == true) {
                               _submit();
                             } else {
                               _checkVal = true;
@@ -215,7 +229,8 @@ class _SignInState extends State<SignIn> {
                   ),
                   TextButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/signUp');
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => SignUp()));
                     },
                     child: const Text(
                       'Sign Up',
