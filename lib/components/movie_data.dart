@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class CustomMovie extends StatelessWidget {
-  dynamic movieTitle;
-  dynamic image;
+  String movieTitle;
+  String image;
   DateTime releaseDate;
   dynamic circularAverage;
   dynamic rating;
@@ -23,7 +23,7 @@ class CustomMovie extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 5),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
             shadowColor: Colors.transparent,
@@ -119,9 +119,6 @@ class CustomMovie extends StatelessWidget {
                         color: Colors.black),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 10,
               ),
               Container(
                 width: double.infinity,

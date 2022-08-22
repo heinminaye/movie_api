@@ -46,8 +46,7 @@ class _SignUpState extends State<SignUp> {
 
         final newUser = await _auth.createUserWithEmailAndPassword(
             email: usernameController.text, password: passwordController.text);
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => MyHomePage()));
+        Navigator.pushReplacementNamed(context, '/homePage');
       } catch (e) {
         var snackBar = SnackBar(
           duration: const Duration(milliseconds: 1500),
