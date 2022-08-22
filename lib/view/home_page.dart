@@ -90,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
             child: Row(
               children: [
                 const Text(
@@ -189,30 +189,27 @@ class _MyHomePageState extends State<MyHomePage> {
                             color: Colors.grey,
                           ),
                         )
-                      : Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: ListView.builder(
-                            itemCount: moviePopular.length,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              var vote = moviePopular[index].voteAverage;
-                              var vote_average = vote * 10;
-                              var circular_average = vote / 10;
+                      : ListView.builder(
+                          itemCount: moviePopular.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            var vote = moviePopular[index].voteAverage;
+                            var vote_average = vote * 10;
+                            var circular_average = vote / 10;
 
-                              return Column(
-                                children: [
-                                  CustomMovie(
-                                    movieTitle: moviePopular[index].title,
-                                    image: moviePopular[index].posterPath,
-                                    releaseDate:
-                                        moviePopular[index].releaseDate,
-                                    rating: vote_average,
-                                    circularAverage: circular_average,
-                                  ),
-                                ],
-                              );
-                            },
-                          )),
+                            return Column(
+                              children: [
+                                CustomMovie(
+                                  movieTitle: moviePopular[index].title,
+                                  image: moviePopular[index].posterPath,
+                                  releaseDate: moviePopular[index].releaseDate,
+                                  rating: vote_average,
+                                  circularAverage: circular_average,
+                                ),
+                              ],
+                            );
+                          },
+                        ),
                 )
               : Flexible(
                   child: (moviePopular.isEmpty)
@@ -221,29 +218,27 @@ class _MyHomePageState extends State<MyHomePage> {
                             color: Colors.grey,
                           ),
                         )
-                      : Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: ListView.builder(
-                            itemCount: topRated.length,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              var vote = topRated[index].voteAverage;
-                              var vote_average = vote * 10;
-                              var circular_average = vote / 10;
+                      : ListView.builder(
+                          itemCount: topRated.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            var vote = topRated[index].voteAverage;
+                            var vote_average = vote * 10;
+                            var circular_average = vote / 10;
 
-                              return Column(
-                                children: [
-                                  CustomMovie(
-                                    movieTitle: topRated[index].name,
-                                    image: topRated[index].posterPath,
-                                    releaseDate: topRated[index].firstAirDate,
-                                    rating: vote_average,
-                                    circularAverage: circular_average,
-                                  ),
-                                ],
-                              );
-                            },
-                          )),
+                            return Column(
+                              children: [
+                                CustomMovie(
+                                  movieTitle: topRated[index].name,
+                                  image: topRated[index].posterPath,
+                                  releaseDate: topRated[index].firstAirDate,
+                                  rating: vote_average,
+                                  circularAverage: circular_average,
+                                ),
+                              ],
+                            );
+                          },
+                        ),
                 )
         ],
       ),
